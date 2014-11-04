@@ -1,0 +1,8 @@
+[21-Oct-2014 17:38:27 Europe/London] PHP Parse error:  syntax error, unexpected '"' in /home/giftedpi/games/public_html/ptd/login.php on line 8
+[21-Oct-2014 20:15:10 Europe/London] PHP Parse error:  syntax error, unexpected '$_POST' (T_VARIABLE), expecting '(' in /home/giftedpi/games/public_html/ptd/register.php on line 14
+[21-Oct-2014 20:17:03 Europe/London] PHP Warning:  mysql_num_rows() expects parameter 1 to be resource, boolean given in /home/giftedpi/games/public_html/ptd/register.php on line 24
+[21-Oct-2014 20:17:05 Europe/London] PHP Warning:  mysql_num_rows() expects parameter 1 to be resource, boolean given in /home/giftedpi/games/public_html/ptd/register.php on line 24
+[21-Oct-2014 20:17:15 Europe/London] PHP Warning:  mysql_num_rows() expects parameter 1 to be resource, boolean given in /home/giftedpi/games/public_html/ptd/register.php on line 24
+[21-Oct-2014 21:16:02 Europe/London] PHP Parse error:  syntax error, unexpected '=' in /home/giftedpi/games/public_html/ptd/get.php on line 7
+[21-Oct-2014 21:16:13 Europe/London] PHP Parse error:  syntax error, unexpected '=' in /home/giftedpi/games/public_html/ptd/get.php on line 7
+[21-Oct-2014 21:18:12 Europe/London] PHP Parse error:  syntax error, unexpected '=' in /home/giftedpi/games/public_html/ptd/get.php on line 7
