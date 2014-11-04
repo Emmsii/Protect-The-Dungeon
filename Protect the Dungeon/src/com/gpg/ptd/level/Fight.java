@@ -32,7 +32,7 @@ public class Fight extends Dungeon{
 	}
 	
 	private void init(){
-		player = new Player(0, 5 * 32, 15 * 32, "name", 100, this, key, random); //TODO: *32 or something
+		player = new Player(0, 5 * 32, 15 * 32, "name", 10000, this, key, random); //TODO: *32 or something
 //		mobs.add(new Orc(1, 12 * 32, 16 * 32, "orc", 100, this, pathfinder, random));
 		xScroll = player.getX() - screen.width / 2;
 		yScroll = player.getY() - screen.height/ 2;
@@ -84,12 +84,12 @@ public class Fight extends Dungeon{
 		for(Spawner s : spawners) s.update();
 		for(Mob m : mobs){
 			m.update();
-			mob[m.getX() / 32][m.getY() / 32] = m.getId();
+			mob[m.getTileX()][m.getTileY()] = m.getId();
 		}
 		for(Item i : items) i.update();
 		for(Particle p : particles) p.update();
 		player.update();
-		mob[player.getX() / 32][player.getY() / 32] = player.getId();
+		mob[player.getTileX()][player.getTileY()] = player.getId();
 		
 		removeParticles();
 		removeMobs();
@@ -136,6 +136,25 @@ public class Fight extends Dungeon{
 			font.render(s.getAmount() + "", s.getX() * 32 - xScroll, s.getY() * 32 - yScroll, 0xffffffff, 4, true, screen);
 		}
 		
+		for(int y = 0; y < height; y++){
+			for(int x = 0; x < width; x++){
+				for(int ya = 0; ya < 32; ya++){
+					for(int xa = 0; xa < 32; xa++){
+						if(ya == 0 || xa == 0){
+							screen.renderPixelTrans(xa + x * 32 - xScroll, ya + y * 32 - yScroll, 0xffffffff, 0.7f);
+						}
+					}
+				}
+				
+				if(mob[x][y] != -1){
+					screen.renderPixel(x * 32 - xScroll, y * 32 - yScroll, 0xff00FF04);
+					screen.renderPixel(x * 32 - xScroll + 1, y * 32 - yScroll + 1, 0xff00FF04);
+					screen.renderPixel(x * 32 - xScroll, y * 32 - yScroll + 1, 0xff00FF04);
+					screen.renderPixel(x * 32 - xScroll + 1, y * 32 - yScroll, 0xff00FF04);
+				}
+			}
+		}
+		
 		font.render("WASD to move, arrow keys to attack.", 500, 710, 0xffffffff, 1, true, screen);
 		font.render("Mob Count: " + mobs.size(), 10, 700, 0xffffffff, 1, true, screen);
 		font.render("Particle Count: " + particles.size(), 10, 710, 0xffffffff, 1, true, screen);
@@ -178,6 +197,7 @@ public class Fight extends Dungeon{
 				((HostileMob)mob).getSpawner().remove(1);
 				i.remove();
 				for(int j = 0; j < 5; j++) addParticle(new BloodParticle(getParticles().size(), mob.getX(), mob.getY(), 0xff6E2120, 8, 1.1, this, random));
+				items.add(new Gold(items.size(), mob.getX(), mob.getY(), mob.getInventory().getGold(), this, random));
 				player.addScore(mob.getScore());
 				continue;
 			}

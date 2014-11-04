@@ -28,7 +28,7 @@ public class Particle extends Entity{
 	public void render(int xScroll, int yScroll, Font font, Screen screen){
 		
 	}
-	
+		
 	public void move(double xc, double yc) {
 //		if(collision(xc, yc)){
 //			this.xa *= 0.8;

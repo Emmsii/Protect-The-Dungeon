@@ -16,6 +16,7 @@ public class Mob extends Entity{
 
 	protected int lastX, lastY;
 	
+	
 	protected float speed;
 	protected final float MAX_SPEED = 4.0f;
 	protected final float MIN_SPEED = 2.0f;
@@ -80,19 +81,22 @@ public class Mob extends Entity{
 			return;
 		}	
 				
-		if(xa > 0) dir = 1;
-		if(xa < 0) dir = 3;
-		if(ya > 0) dir = 2;
-		if(ya < 0) dir = 0;
+		if(knockback <= 0){
+			if(xa > 0) dir = 1;
+			if(xa < 0) dir = 3;
+			if(ya > 0) dir = 2;
+			if(ya < 0) dir = 0;
+		}
 		
 		if(attDir != -1) dir = attDir;
 		
-		if(!tileCollision(xa, ya) && !mobCollision(xa, ya)){
-				moving = true;
-				x += xa;
-				y += ya;
-				return;
-		}
+		if(tileCollision(xa, ya)) return;
+		if(mobCollision(xa, ya)) return;
+		
+		moving = true;
+		x += xa;
+		y += ya;
+		return;
 	}
 	
 	/*
@@ -112,7 +116,7 @@ public class Mob extends Entity{
 	
 	public void calculateBobbing(){
 		float maxB = 3.5f;
-		float inc = 0.657f;
+		float inc = 0.25f;
 		
 		if(moving){
 			if(up){
@@ -142,7 +146,7 @@ public class Mob extends Entity{
 		if(m != null) return true;
 		return false;
 	}
-	
+
 	public boolean tileCollision(int xa, int ya){
 		for(int c = 0; c < 4; c++){
 			int xt = ((x + xa) + c % 2 * collision_width + collision_w_offset) / 32;
@@ -160,12 +164,9 @@ public class Mob extends Entity{
 	}
 	
 	public void checkForMob(int x, int y, int attDir, int damage){
-		Mob m = dungeon.checkAndGetMob((x + 16) / 32, (y + 16) / 32, attDir, this);
-		if(m != null){
-			m.damage(damage, attDir, this);
-		}else{
-			
-		}
+		Mob m = dungeon.checkAndGetMob((x) / 32, (y) / 32, attDir, this);
+		if(m != null) m.damage(damage, attDir, this);
+		
 	}
 	
 	public void animation(){

@@ -26,7 +26,11 @@ public class Screen {
 	public void renderPixel(int x, int y, int col){
 		if(x  < 0 || y < 0 || x >= width || y >= height) return;
 		pixels[x + y * width] = col;
-		
+	}
+	
+	public void renderPixelTrans(int x, int y, int col, float trans){
+		if(x  < 0 || y < 0 || x >= width || y >= height) return;
+		pixels[x + y * width] = blend(col, pixels[x + y * width], trans);
 	}
 	
 	public void renderPixelBlend(int x, int y, int colA, int colB){

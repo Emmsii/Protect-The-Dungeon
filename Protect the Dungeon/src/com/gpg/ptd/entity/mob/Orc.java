@@ -27,14 +27,9 @@ public class Orc extends HostileMob{
 		lastY = y;
 		if(target == null) wanderSpawner();
 		else{
-			pathTo(new Vector2i(x / 32, y / 32), new Vector2i((target.getX() + 16)/ 32, (target.getY() + 16) / 32));
-			
-			if(target.getY() < y) attDir = 0;
-			if(target.getX() > x) attDir = 1;
-			if(target.getY() > y) attDir = 2;
-			if(target.getX() < x) attDir = 3;
-						
-			attack(dir, random.nextInt(4));
+			pathTo(new Vector2i(x / 32, y / 32), new Vector2i((target.getX() + 16)/ 32, (target.getY() + 16) / 32));	
+			attDir = dir;
+			attack(attDir, random.nextInt(4));
 		}
 		animation();
 		calculateBobbing();
@@ -45,12 +40,21 @@ public class Orc extends HostileMob{
 //		pathTo(new Vector2i(x / 32, y / 32), new Vector2i(dungeon.getPlayer().getX() / 32, dungeon.getPlayer().getY() / 32));
 
 		time++;
-		tileX = x / 32;
-		tileY = y / 32;
+		tileX = (x + 16) / 32;
+		tileY = (y + 16) / 32;
 	}
 	
 	public void render(int xScroll, int yScroll, Screen screen){
+		if(attackTime > 0){
+			if(attDir == 0) screen.render(x - xScroll, (int) (y - yScroll - 15 - bob), 1, 2, 32, 1, SpriteSheet.textures);
+			if(attDir == 1) screen.render(x - xScroll + 19, (int) (y - yScroll + 6 - bob), 0, 2, 32, 1, SpriteSheet.textures);
+			if(attDir == 3) screen.render(x - xScroll - 19, (int) (y - yScroll + 6 - bob), 3, 2, 32, 1, SpriteSheet.textures);
+		}
 		screen.render((x) - xScroll, (int) ((y) - yScroll - bob), 0 + frame, 1 + dir, 32, 1, SpriteSheet.mobs);
+		if(attackTime > 0){
+			if(attDir == 2) screen.render(x - xScroll - 1, (int) (y - yScroll + 23 - bob), 2, 2, 32, 1, SpriteSheet.textures);
+		}
+		
 		//Render collision box
 		for(int c = 0; c < 4; c++){
 			int xt = ((x - xScroll) + c % 2 * collision_width + collision_w_offset);

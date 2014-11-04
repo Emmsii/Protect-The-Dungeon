@@ -44,7 +44,7 @@ public class Game {
 		this.user = user;
 		
 		state = new GameState();
-		font = new Font();
+		font = new Font(); 
 		switchState(4);
 		
 		init();

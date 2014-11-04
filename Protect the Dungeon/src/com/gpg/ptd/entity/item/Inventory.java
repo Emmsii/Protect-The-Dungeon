@@ -51,6 +51,10 @@ public class Inventory {
 		return result;
 	}
 	
+	public int getGold(){
+		return gold;
+	}
+	
 	public void addGold(int g){
 		gold += g;
 	}

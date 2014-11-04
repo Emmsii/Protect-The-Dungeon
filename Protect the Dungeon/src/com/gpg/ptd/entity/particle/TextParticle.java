@@ -46,8 +46,9 @@ public class TextParticle extends Particle{
 		
 	}
 	
+	
+	
 	public void render(int xScroll, int yScroll, Font font, Screen screen){
-		
 		font.render(msg, (x) - xScroll , (y) - yScroll - life , col, size, true, screen);
 	}
 }

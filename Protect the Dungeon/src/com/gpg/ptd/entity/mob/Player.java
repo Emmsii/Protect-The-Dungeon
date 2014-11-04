@@ -24,10 +24,12 @@ public class Player extends Mob{
 		this.name = name;
 		this.key = key;
 		
-		collision_width = 15;
-		collision_height = 15;
-		collision_w_offset = 7;
-		collision_h_offset = 7;
+		health = 100000;
+		
+		collision_width = 26;
+		collision_height = 26;
+		collision_w_offset = 3;
+		collision_h_offset = 3;
 		
 		weight = 10;
 		
@@ -43,12 +45,13 @@ public class Player extends Mob{
 	}
 
 	public void update(){
-		
 		key.update();
 		int xa = 0;
 		int ya = 0;
 		
-	
+		animation();
+		calculateBobbing();
+		if(knockback > 0.0f) calculateKnockback();
 		
 		if(key.shift && moving){
 			if(energy > 0.0f){
@@ -101,19 +104,22 @@ public class Player extends Mob{
 		else moving = false;
 
 		calculateBobbing();
-		tileX = x / 32;
-		tileY = y / 32;
+		tileX = (x + 16) / 32;
+		tileY = (y + 16) / 32;
 	}
 		
 	public void render(int xScroll, int yScroll, Screen screen){
 		if(attackTime > 0){
-			if(attDir == 0) screen.render(x - xScroll, y - yScroll - 25, 1, 2, 32, 1, SpriteSheet.textures);
-			if(attDir == 1) screen.render(x - xScroll + 25, y - yScroll, 0, 2, 32, 1, SpriteSheet.textures);
-			if(attDir == 2) screen.render(x - xScroll, y - yScroll + 23, 2, 2, 32, 1, SpriteSheet.textures);
-			if(attDir == 3) screen.render(x - xScroll - 25, y - yScroll, 3, 2, 32, 1, SpriteSheet.textures);
+			if(attDir == 0) screen.render(x - xScroll, (int) (y - yScroll - 15 - bob), 1, 2, 32, 1, SpriteSheet.textures);
+			if(attDir == 1) screen.render(x - xScroll + 19, (int) (y - yScroll + 6 - bob), 0, 2, 32, 1, SpriteSheet.textures);
+			if(attDir == 3) screen.render(x - xScroll - 19, (int) (y - yScroll + 6 - bob), 3, 2, 32, 1, SpriteSheet.textures);
 		}
 		
-		screen.render(x - xScroll, y - yScroll, 0 + dir, 0, 32, 1, SpriteSheet.mobs);
+		screen.render((x) - xScroll, (int) ((y) - yScroll - bob), 2 + frame, 1 + dir, 32, 1, SpriteSheet.mobs);
+		
+		if(attackTime > 0){
+			if(attDir == 2) screen.render(x - xScroll - 1, (int) (y - yScroll + 23 - bob), 2, 2, 32, 1, SpriteSheet.textures);
+		}
 		
 		for(int c = 0; c < 4; c++){
 			int xt = ((x - xScroll) + c % 2 * collision_width + collision_w_offset);

@@ -46,12 +46,13 @@ public class BloodParticle extends Particle {
 //		y = (int) yy;
 		move(xx, yy);
 	}
-	
+		
 	public void render(int xScroll, int yScroll, Font font, Screen screen){
 		
 		for(int yb = 0; yb < size; yb++){
 			for(int xb = 0; xb < size; xb++){
-				screen.renderPixel((xb + x + 16) - xScroll, (yb + y + 16) - yScroll - (int) (zz), col);
+				screen.renderPixelTrans((xb + x + 16) - xScroll, (yb + y + 16) - yScroll - (int) (zz), 0xff000000, 0.75f);
+				screen.renderPixelTrans((xb + x + 16) - xScroll, (yb + y + 16) - yScroll - (int) (zz), col, 0.6f);
 			}
 		}
 		

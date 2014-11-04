@@ -126,10 +126,28 @@ public class Dungeon {
 			int mw = mx + m.getCollision_width();
 			int mh = my + m.getCollision_height();
 			
+			/*
+			 * x0 = topLeft
+			 * y0 = topRight
+			 * x1 = bottomRight
+			 * y1 = bottomLeft
+			 * 
+			 * mx = topLeft
+			 * my = topRight
+			 * mw = bottomRight
+			 * mh = bottomLeft
+			 */
+			
 			if(x0 > mx && x0 < mw && y0 > my && y0 < mh) return m;
 			if(x1 > mx && x1 < mw && y1 > my && y1 < mh) return m;
 			if(x0 > mx && x0 < mw && y1 > my && y1 < mh) return m;
 			if(x1 > mx && x1 < mw && y0 > my && y0 < mh) return m;
+			
+			if(mx > x0 && mw < x0 && my > y0 && mh < y0) return m;
+			if(mx > x1 && mw < x1 && my > y1 && mh < y1) return m;
+			if(mx > x0 && mw < x0 && my > y1 && mh < y1) return m;
+			if(mx > x1 && mw < x1 && my > y0 && mh < y0) return m;
+			
 			
 		}
 		
@@ -142,6 +160,11 @@ public class Dungeon {
 		if(x1 > px && x1 < pw && y1 > py && y1 < ph) return player;
 		if(x0 > px && x0 < pw && y1 > py && y1 < ph) return player;
 		if(x1 > px && x1 < pw && y0 > py && y0 < ph) return player;
+		
+		if(px > x0 && pw < x0 && py > y0 && ph < y0) return player;
+		if(px > x1 && pw < x1 && py > y1 && ph < y1) return player;
+		if(px > x0 && pw < x0 && py > y1 && ph < y1) return player;
+		if(px > x1 && pw < x1 && py > y0 && ph < y0) return player;
 		
 		
 		return null;
