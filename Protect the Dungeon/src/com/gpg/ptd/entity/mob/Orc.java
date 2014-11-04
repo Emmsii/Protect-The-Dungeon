@@ -25,6 +25,7 @@ public class Orc extends HostileMob{
 		if(lastX == x && lastY == y) moving = false;
 		lastX = x;
 		lastY = y;
+		collision.setPos(x + 5, y + 5);
 		if(target == null) wanderSpawner();
 		else{
 			pathTo(new Vector2i(x / 32, y / 32), new Vector2i((target.getX() + 16)/ 32, (target.getY() + 16) / 32));	
@@ -56,14 +57,20 @@ public class Orc extends HostileMob{
 		}
 		
 		//Render collision box
-		for(int c = 0; c < 4; c++){
-			int xt = ((x - xScroll) + c % 2 * collision_width + collision_w_offset);
-			int yt = ((y - yScroll) + c / 2 * collision_height + collision_h_offset);
-			screen.renderPixel(xt, yt + 1, 0xffffff00);
-			screen.renderPixel(xt, yt - 1, 0xffffff00);
-			screen.renderPixel(xt + 1, yt, 0xffffff00);
-			screen.renderPixel(xt - 1, yt, 0xffffff00);
-		}
+//		for(int c = 0; c < 4; c++){
+//			int xt = ((x - xScroll) + c % 2 * collision_width + collision_w_offset);
+//			int yt = ((y - yScroll) + c / 2 * collision_height + collision_h_offset);
+//			screen.renderPixel(xt, yt + 1, 0xffffff00);
+//			screen.renderPixel(xt, yt - 1, 0xffffff00);
+//			screen.renderPixel(xt + 1, yt, 0xffffff00);
+//			screen.renderPixel(xt - 1, yt, 0xffffff00);
+//		}
+		
+		for(int i = 0; i < 4; i++) screen.renderPixel(collision.getX() - xScroll + i, collision.getY() - yScroll + i, 0xffffff00);
+		for(int i = 0; i < 4; i++) screen.renderPixel(collision.getX() - xScroll + i, collision.getY() + collision.getHeight() - yScroll + i, 0xffffff00);
+		for(int i = 0; i < 4; i++) screen.renderPixel(collision.getX() + collision.getWidth() - xScroll + i, collision.getY() - yScroll + i, 0xffffff00);
+		for(int i = 0; i < 4; i++) screen.renderPixel(collision.getX() + collision.getWidth() - xScroll + i, collision.getY() + collision.getHeight() - yScroll + i, 0xffffff00);
+		
 		
 		if(health < 100){
 			for(int ya = 0; ya < 3; ya++){

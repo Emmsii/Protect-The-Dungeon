@@ -9,6 +9,7 @@ import com.gpg.ptd.entity.particle.TextParticle;
 import com.gpg.ptd.graphics.Screen;
 import com.gpg.ptd.level.Dungeon;
 import com.gpg.ptd.util.Pathfinder;
+import com.gpg.ptd.util.Rect;
 
 public class Mob extends Entity{
 	
@@ -60,8 +61,9 @@ public class Mob extends Entity{
 		
 		energy = 100.0f;
 		speed = 1.0f;
-		
 		inventory = new Inventory();
+		
+		
 		
 	}
 
@@ -80,7 +82,11 @@ public class Mob extends Entity{
 			move(0, ya);
 			return;
 		}	
-				
+		
+		if(tileCollision(xa, ya)) return;
+//		if(mobCollision(xa, ya)) return;
+		if(testCollision(xa, ya)) return;
+		
 		if(knockback <= 0){
 			if(xa > 0) dir = 1;
 			if(xa < 0) dir = 3;
@@ -90,12 +96,13 @@ public class Mob extends Entity{
 		
 		if(attDir != -1) dir = attDir;
 		
-		if(tileCollision(xa, ya)) return;
-		if(mobCollision(xa, ya)) return;
+
 		
 		moving = true;
 		x += xa;
 		y += ya;
+		
+		
 		return;
 	}
 	
@@ -113,7 +120,10 @@ public class Mob extends Entity{
 		knockback -= 0.3;
 	}
 
-	
+	public boolean testCollision(int xa, int ya){
+		return dungeon.getMob2(xa, ya, this);
+	}
+
 	public void calculateBobbing(){
 		float maxB = 3.5f;
 		float inc = 0.25f;
@@ -132,6 +142,8 @@ public class Mob extends Entity{
 			bob = 0.0f;
 		}
 	}
+	
+	
 	
 	public boolean mobCollision(int xa, int ya){
 		xa = xa + x;

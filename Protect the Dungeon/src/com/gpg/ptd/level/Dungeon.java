@@ -41,7 +41,7 @@ public class Dungeon {
 	public int[][] mob = new int[width][height];
 
 	
-	protected Player player;
+//	protected Player player;
 	protected List<Mob> mobs = new ArrayList<Mob>();
 	protected List<Trap> traps = new ArrayList<Trap>();
 	protected List<Spawner> spawners = new ArrayList<Spawner>();	
@@ -117,7 +117,24 @@ public class Dungeon {
 		return null;
 	}
 	
+	public boolean getMob2(int x, int y, Mob mob) {
+		for(Mob m : mobs){
+			if(m.equals(mob)) continue;
+			if(m.getCollision().intersects(mob.getCollision())) return true;
+		}
+		return false;
+	}
+
+	
 	public Mob getMob(int x0, int y0, int x1, int y1, Mob mob){
+		
+//		int px = player.getX() + player.getCollision_w_offset();
+//		int py = player.getY() + player.getCollision_h_offset();
+//		int pw = px + player.getCollision_width();
+//		int ph = py + player.getCollision_height();
+		
+
+		
 		for(Mob m : mobs){
 			if(m.equals(mob)) continue;
 			
@@ -136,35 +153,25 @@ public class Dungeon {
 			 * my = topRight
 			 * mw = bottomRight
 			 * mh = bottomLeft
+			 * 
+			 * 
 			 */
 			
+			if(mx > x0 && mw < y0 && my > y0 && mh < y0) return m;
+					
 			if(x0 > mx && x0 < mw && y0 > my && y0 < mh) return m;
 			if(x1 > mx && x1 < mw && y1 > my && y1 < mh) return m;
 			if(x0 > mx && x0 < mw && y1 > my && y1 < mh) return m;
 			if(x1 > mx && x1 < mw && y0 > my && y0 < mh) return m;
 			
-			if(mx > x0 && mw < x0 && my > y0 && mh < y0) return m;
-			if(mx > x1 && mw < x1 && my > y1 && mh < y1) return m;
-			if(mx > x0 && mw < x0 && my > y1 && mh < y1) return m;
-			if(mx > x1 && mw < x1 && my > y0 && mh < y0) return m;
-			
 			
 		}
-		
-		int px = player.getX() + player.getCollision_w_offset();
-		int py = player.getY() + player.getCollision_h_offset();
-		int pw = px + player.getCollision_width();
-		int ph = py + player.getCollision_height();
-		
-		if(x0 > px && x0 < pw && y0 > py && y0 < ph) return player;
-		if(x1 > px && x1 < pw && y1 > py && y1 < ph) return player;
-		if(x0 > px && x0 < pw && y1 > py && y1 < ph) return player;
-		if(x1 > px && x1 < pw && y0 > py && y0 < ph) return player;
-		
-		if(px > x0 && pw < x0 && py > y0 && ph < y0) return player;
-		if(px > x1 && pw < x1 && py > y1 && ph < y1) return player;
-		if(px > x0 && pw < x0 && py > y1 && ph < y1) return player;
-		if(px > x1 && pw < x1 && py > y0 && ph < y0) return player;
+//		if(px > x0 && pw < y0 && py > y0 && ph < y0) return player;
+//
+//		if(x0 > px && x0 < pw && y0 > py && y0 < ph) return player;
+//		if(x1 > px && x1 < pw && y1 > py && y1 < ph) return player;
+//		if(x0 > px && x0 < pw && y1 > py && y1 < ph) return player;
+//		if(x1 > px && x1 < pw && y0 > py && y0 < ph) return player;
 		
 		
 		return null;
@@ -193,16 +200,16 @@ public class Dungeon {
 			if(dir == 3) if((m.getX() + 16)  / 32 == x  - 1 && (m.getY() + 16) / 32 == y) return m;
 		}
 		
-		if(player.equals(mob)) return null;
-		
-		int px = player.getX();
-		int py = player.getY();
-		
-		if((px + 16) / 32 == x && (py + 16) / 32 == y) return player;
-		if(dir == 0) if((px + 16) / 32 == x && (py + 16) / 32 == y - 1) return player;
-		if(dir == 1) if((px + 16) / 32 == x + 1 && (py + 16) / 32 == y) return player;
-		if(dir == 2) if((px + 16) / 32 == x && (py + 16) / 32 == y + 1) return player;
-		if(dir == 3) if((px + 16) / 32 == x - 1 && (py + 16) / 32 == y) return player;
+//		if(player.equals(mob)) return null;
+//		
+//		int px = player.getX();
+//		int py = player.getY();
+//		
+//		if((px + 16) / 32 == x && (py + 16) / 32 == y) return player;
+//		if(dir == 0) if((px + 16) / 32 == x && (py + 16) / 32 == y - 1) return player;
+//		if(dir == 1) if((px + 16) / 32 == x + 1 && (py + 16) / 32 == y) return player;
+//		if(dir == 2) if((px + 16) / 32 == x && (py + 16) / 32 == y + 1) return player;
+//		if(dir == 3) if((px + 16) / 32 == x - 1 && (py + 16) / 32 == y) return player;
 		
 		return null;
 	}
@@ -216,6 +223,11 @@ public class Dungeon {
 		}
 		
 		return false;
+	}
+	
+	public Player getPlayer(){
+		for(Mob m : mobs) if(m instanceof Player) return (Player) m;
+		return null;
 	}
 		
 	public void addParticle(Particle p){
@@ -244,13 +256,11 @@ public class Dungeon {
 		return tiles;
 	}
 
-	public Player getPlayer() {
-		return player;
-	}
-
-	public void setPlayer(Player player) {
-		this.player = player;
-	}
-
-	
+//	public Player getPlayer() {
+//		return player;
+//	}
+//
+//	public void setPlayer(Player player) {
+//		this.player = player;
+//	}	
 }

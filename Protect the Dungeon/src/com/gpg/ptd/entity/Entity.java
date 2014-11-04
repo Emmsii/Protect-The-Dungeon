@@ -3,6 +3,7 @@ package com.gpg.ptd.entity;
 import java.util.Random;
 
 import com.gpg.ptd.level.Dungeon;
+import com.gpg.ptd.util.Rect;
 
 public class Entity {
 
@@ -14,12 +15,16 @@ public class Entity {
 	protected int tileX, tileY;
 	protected int time;
 	
+	protected Rect collision;
+	
 	public Entity(int id, int x, int y, Dungeon dungeon, Random random){
 		this.id = id;
 		this.x = x;
 		this.y = y;
 		this.dungeon = dungeon;
 		this.random = random;
+		
+		collision = new Rect(x + 5, y + 5, 25, 25);
 	}
 
 	public int getId() {
@@ -68,5 +73,13 @@ public class Entity {
 
 	public void setTileY(int tileY) {
 		this.tileY = tileY;
+	}
+
+	public Rect getCollision() {
+		return collision;
+	}
+
+	public void setCollision(Rect collision) {
+		this.collision = collision;
 	}
 }

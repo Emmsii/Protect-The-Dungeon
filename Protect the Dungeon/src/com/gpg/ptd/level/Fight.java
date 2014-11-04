@@ -32,10 +32,10 @@ public class Fight extends Dungeon{
 	}
 	
 	private void init(){
-		player = new Player(0, 5 * 32, 15 * 32, "name", 10000, this, key, random); //TODO: *32 or something
+		mobs.add(new Player(0, 5 * 32, 15 * 32, "name", 10000, this, key, random)); //TODO: *32 or something
 //		mobs.add(new Orc(1, 12 * 32, 16 * 32, "orc", 100, this, pathfinder, random));
-		xScroll = player.getX() - screen.width / 2;
-		yScroll = player.getY() - screen.height/ 2;
+		xScroll = getPlayer().getX() - screen.width / 2;
+		yScroll = getPlayer().getY() - screen.height/ 2;
 		
 		items.add(new Gold(items.size(), 4 * 32, 16 * 32, 54, this, random));
 		
@@ -69,7 +69,7 @@ public class Fight extends Dungeon{
 	}
 
 	public void update(){
-		if(player.isDead()) fail = true;
+//		if(player.isDead()) fail = true;
 		if(fail) return;
 		
 		for(int y = 0; y < height; y++){
@@ -88,22 +88,20 @@ public class Fight extends Dungeon{
 		}
 		for(Item i : items) i.update();
 		for(Particle p : particles) p.update();
-		player.update();
-		mob[player.getTileX()][player.getTileY()] = player.getId();
+//		player.update();
+		mob[getPlayer().getTileX()][getPlayer().getTileY()] = getPlayer().getId();
 		
 		removeParticles();
 		removeMobs();
 		removeItems();
-		
-		
-		
+				
 		/*
 		 * THIS SMOOTHLY INTERPOLATES BETWEEN TWO POINTS USING THE LERP METHOD.
 		 * Compared to the EDIT MODE lerp function, this will keep the player centred. Can follow any mob, replace player name with mob.
 		 */
 		
-		xa = player.getX() - screen.width / 2;
-		ya = player.getY() - screen.height / 2;
+		xa = getPlayer().getX() - screen.width / 2;
+		ya = getPlayer().getY() - screen.height / 2;
 		if(xa < 0) xa = 0;
 		if(ya < 0) ya = 0;
 		if(xa > screen.width / 1.663) xa = (int) (screen.width / 1.663);
@@ -130,7 +128,7 @@ public class Fight extends Dungeon{
 		for(Particle p : particles) p.render(xScroll, yScroll, font, screen);
 		for(Item i : items) i.render(xScroll, yScroll, screen);
 		for(Mob m : mobs) m.render(xScroll, yScroll, screen);
-		player.render(xScroll, yScroll, screen);
+//		player.render(xScroll, yScroll, screen);
 		
 		for(Spawner s : spawners){
 			font.render(s.getAmount() + "", s.getX() * 32 - xScroll, s.getY() * 32 - yScroll, 0xffffffff, 4, true, screen);
@@ -171,10 +169,19 @@ public class Fight extends Dungeon{
 //		font.render("Weight: " + player.getWeight(), 450, 35, 0xfff1Afff, 3, false, screen);
 //		font.render("Gold: " + player.getInventory().getAmount(), 450, 60, 0xff22ffff, 3, false, screen);
 		
-		font.render("Score " + player.getScore(), 10, 10, 0xB03030, 3, true, screen);
+		for(Mob m : mobs){
+			font.render(m.getCollision().getX() + "", m.getX() - xScroll, m.getY() - yScroll, 0xffffffff, 1, true, screen);
+			font.render(m.getCollision().getY() + "", m.getX() - xScroll, m.getY() - yScroll + 10, 0xffffffff, 1, true, screen);
+			font.render((m.getCollision().getWidth() + m.getCollision().getX()) + "", m.getX() - xScroll, m.getY() - yScroll + 20, 0xffffffff, 1, true, screen);
+			font.render((m.getCollision().getHeight() + m.getCollision().getY()) + "", m.getX() - xScroll, m.getY() - yScroll + 30, 0xffffffff, 1, true, screen);
+		}
+		
+		
+		
+		font.render("Score " + getPlayer().getScore(), 10, 10, 0xB03030, 3, true, screen);
 		
 		font.render("Gold:", 10, 40, 0xffffffff, 2, true, screen);
-		font.render(player.getInventory().getAmount(), 85, 40, 0xfffff00f, 2, true, screen);
+		font.render(getPlayer().getInventory().getAmount(), 85, 40, 0xfffff00f, 2, true, screen);
 		
 		if(fail){
 			font.render("You Died!", 425, 250, 0xffff0000, 7, true, screen);
@@ -198,7 +205,7 @@ public class Fight extends Dungeon{
 				i.remove();
 				for(int j = 0; j < 5; j++) addParticle(new BloodParticle(getParticles().size(), mob.getX(), mob.getY(), 0xff6E2120, 8, 1.1, this, random));
 				items.add(new Gold(items.size(), mob.getX(), mob.getY(), mob.getInventory().getGold(), this, random));
-				player.addScore(mob.getScore());
+				getPlayer().addScore(mob.getScore());
 				continue;
 			}
 		}
