@@ -18,6 +18,7 @@ import com.gpg.ptd.level.tile.Tile;
 import com.gpg.ptd.util.Key;
 import com.gpg.ptd.util.Mouse;
 import com.gpg.ptd.util.Pathfinder;
+import com.gpg.ptd.util.Rect;
 
 public class Dungeon {
 
@@ -104,76 +105,14 @@ public class Dungeon {
 		return alpha * alpha * (3.0f - 2.0f * alpha);
 	}
 	
-	public Mob getMob(int xa, int ya, Mob mob){
+	public Mob getMob(int xa, int ya, Mob mob){	
 		for(Mob m : mobs){
 			if(m.equals(mob)) continue;
-			int xb = m.getX() + m.getCollision_w_offset();
-			int yb = m.getY() + m.getCollision_h_offset();
-			int wb = xb + m.getCollision_width();
-			int hb = yb + m.getCollision_height(); 
-			
-			for(int y = yb; y < hb; y++) for(int x = xb; x < wb; x++) if(xa == x && ya == y) return m;
-		}
-		return null;
-	}
-	
-	public boolean getMob2(int x, int y, Mob mob) {
-		for(Mob m : mobs){
-			if(m.equals(mob)) continue;
-			if(m.getCollision().intersects(mob.getCollision())) return true;
-		}
-		return false;
-	}
-
-	
-	public Mob getMob(int x0, int y0, int x1, int y1, Mob mob){
-		
-//		int px = player.getX() + player.getCollision_w_offset();
-//		int py = player.getY() + player.getCollision_h_offset();
-//		int pw = px + player.getCollision_width();
-//		int ph = py + player.getCollision_height();
-		
-
-		
-		for(Mob m : mobs){
-			if(m.equals(mob)) continue;
-			
-			int mx = m.getX() + m.getCollision_w_offset();
-			int my = m.getY() + m.getCollision_h_offset();
-			int mw = mx + m.getCollision_width();
-			int mh = my + m.getCollision_height();
-			
-			/*
-			 * x0 = topLeft
-			 * y0 = topRight
-			 * x1 = bottomRight
-			 * y1 = bottomLeft
-			 * 
-			 * mx = topLeft
-			 * my = topRight
-			 * mw = bottomRight
-			 * mh = bottomLeft
-			 * 
-			 * 
-			 */
-			
-			if(mx > x0 && mw < y0 && my > y0 && mh < y0) return m;
-					
-			if(x0 > mx && x0 < mw && y0 > my && y0 < mh) return m;
-			if(x1 > mx && x1 < mw && y1 > my && y1 < mh) return m;
-			if(x0 > mx && x0 < mw && y1 > my && y1 < mh) return m;
-			if(x1 > mx && x1 < mw && y0 > my && y0 < mh) return m;
-			
-			
-		}
-//		if(px > x0 && pw < y0 && py > y0 && ph < y0) return player;
-//
-//		if(x0 > px && x0 < pw && y0 > py && y0 < ph) return player;
-//		if(x1 > px && x1 < pw && y1 > py && y1 < ph) return player;
-//		if(x0 > px && x0 < pw && y1 > py && y1 < ph) return player;
-//		if(x1 > px && x1 < pw && y0 > py && y0 < ph) return player;
-		
-		
+			Rect r1 = new Rect(m.getX() + m.getCollision_w_offset(), m.getY() + m.getCollision_h_offset(), m.getCollision_width(), m.getCollision_height());
+			Rect r2 = new Rect(mob.getX() + mob.getCollision_w_offset() + xa, mob.getY() + mob.getCollision_h_offset()+ ya, mob.getCollision_width(), m.getCollision_height());
+						
+			if((r1.getX() <= r2.getX() + r2.getWidth() && r2.getX() <= r1.getX() + r1.getWidth() && r1.getY() <= r2.getY() + r2.getHeight() && r2.getY() <= r1.getY() + r1.getHeight())) return m;
+		}		
 		return null;
 	}
 	

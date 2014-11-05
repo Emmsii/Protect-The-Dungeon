@@ -1,7 +1,6 @@
 package com.gpg.ptd.level.object;
 
 import com.gpg.ptd.graphics.Screen;
-import com.gpg.ptd.graphics.Sprite;
 
 public class Obj {
 

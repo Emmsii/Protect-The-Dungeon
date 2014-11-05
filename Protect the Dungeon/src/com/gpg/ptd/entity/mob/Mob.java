@@ -9,7 +9,6 @@ import com.gpg.ptd.entity.particle.TextParticle;
 import com.gpg.ptd.graphics.Screen;
 import com.gpg.ptd.level.Dungeon;
 import com.gpg.ptd.util.Pathfinder;
-import com.gpg.ptd.util.Rect;
 
 public class Mob extends Entity{
 	
@@ -42,6 +41,7 @@ public class Mob extends Entity{
 	protected int knockDir = 0;
 		
 	protected boolean dead;
+	protected boolean canMove = true;
 	
 	protected String name;
 	protected int health;
@@ -82,26 +82,22 @@ public class Mob extends Entity{
 			move(0, ya);
 			return;
 		}	
-		
-		if(tileCollision(xa, ya)) return;
-//		if(mobCollision(xa, ya)) return;
-		if(testCollision(xa, ya)) return;
-		
+			
 		if(knockback <= 0){
 			if(xa > 0) dir = 1;
 			if(xa < 0) dir = 3;
 			if(ya > 0) dir = 2;
 			if(ya < 0) dir = 0;
 		}
-		
 		if(attDir != -1) dir = attDir;
 		
-
+		
+		if(tileCollision(xa, ya)) return;
+		if(mobCollision(xa, ya)) return;	
 		
 		moving = true;
 		x += xa;
 		y += ya;
-		
 		
 		return;
 	}
@@ -109,8 +105,6 @@ public class Mob extends Entity{
 	/*
 	 * Util Methods
 	 */
-	
-
 	public void calculateKnockback(){
 		if(knockDir == 0) move(0, (int) -knockback);
 		if(knockDir == 1) move((int) knockback, 0);
@@ -118,10 +112,6 @@ public class Mob extends Entity{
 		if(knockDir == 3) move((int) -knockback, 0);
 		
 		knockback -= 0.3;
-	}
-
-	public boolean testCollision(int xa, int ya){
-		return dungeon.getMob2(xa, ya, this);
 	}
 
 	public void calculateBobbing(){
@@ -141,21 +131,18 @@ public class Mob extends Entity{
 		}else{
 			bob = 0.0f;
 		}
-	}
-	
-	
+	}	
 	
 	public boolean mobCollision(int xa, int ya){
-		xa = xa + x;
-		ya = ya + y;
-		
-		int x0 = xa + collision_w_offset;
-		int y0 = ya + collision_h_offset;
-		int x1 = xa + collision_width + collision_w_offset;
-		int y1 = ya + collision_height + collision_h_offset;
-		
-		Mob m = dungeon.getMob(x0, y0, x1, y1, this);
-		if(m != null) return true;
+		Mob m = dungeon.getMob(xa, ya, this);
+		if(m != null){
+			if(this instanceof Player){
+				if(this.knockback > 0) m.knockback = this.knockback / 2;
+				else m.knockback = 2f;
+				m.knockDir = dir;
+			}
+			return true;
+		}
 		return false;
 	}
 
@@ -167,7 +154,7 @@ public class Mob extends Entity{
 		}
 		return false;
 	}
-
+	
 	public void attack(int attDir, int damage){
 		if(attackTime == 0){
 			checkForMob(x, y, attDir, damage);

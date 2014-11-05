@@ -13,19 +13,19 @@ public class Orc extends HostileMob{
 	public Orc(int id, int x, int y, String name, int health, Dungeon dungeon, Pathfinder pathfinder, Random random) {
 		super(id, x, y, name, health, dungeon, pathfinder, random);
 		weight = 10;
-		
-		collision_width = 16;
-		collision_height = 28;
+
+		collision_width = 15;
+		collision_height = 27;
 		collision_w_offset = 8;
-		collision_h_offset = 2;
-		
+		collision_h_offset = 3;
 	}
 
 	public void update(){
+
 		if(lastX == x && lastY == y) moving = false;
 		lastX = x;
 		lastY = y;
-		collision.setPos(x + 5, y + 5);
+		
 		if(target == null) wanderSpawner();
 		else{
 			pathTo(new Vector2i(x / 32, y / 32), new Vector2i((target.getX() + 16)/ 32, (target.getY() + 16) / 32));	
@@ -34,6 +34,7 @@ public class Orc extends HostileMob{
 		}
 		animation();
 		calculateBobbing();
+
 		if(knockback > 0.0f) calculateKnockback();
 		
 		if(attackTime > 0) attackTime--;
@@ -57,20 +58,14 @@ public class Orc extends HostileMob{
 		}
 		
 		//Render collision box
-//		for(int c = 0; c < 4; c++){
-//			int xt = ((x - xScroll) + c % 2 * collision_width + collision_w_offset);
-//			int yt = ((y - yScroll) + c / 2 * collision_height + collision_h_offset);
-//			screen.renderPixel(xt, yt + 1, 0xffffff00);
-//			screen.renderPixel(xt, yt - 1, 0xffffff00);
-//			screen.renderPixel(xt + 1, yt, 0xffffff00);
-//			screen.renderPixel(xt - 1, yt, 0xffffff00);
-//		}
-		
-		for(int i = 0; i < 4; i++) screen.renderPixel(collision.getX() - xScroll + i, collision.getY() - yScroll + i, 0xffffff00);
-		for(int i = 0; i < 4; i++) screen.renderPixel(collision.getX() - xScroll + i, collision.getY() + collision.getHeight() - yScroll + i, 0xffffff00);
-		for(int i = 0; i < 4; i++) screen.renderPixel(collision.getX() + collision.getWidth() - xScroll + i, collision.getY() - yScroll + i, 0xffffff00);
-		for(int i = 0; i < 4; i++) screen.renderPixel(collision.getX() + collision.getWidth() - xScroll + i, collision.getY() + collision.getHeight() - yScroll + i, 0xffffff00);
-		
+		for(int c = 0; c < 4; c++){
+			int xt = ((x - xScroll) + c % 2 * collision_width + collision_w_offset);
+			int yt = ((y - yScroll) + c / 2 * collision_height + collision_h_offset);
+			screen.renderPixel(xt, yt + 1, 0xffffff00);
+			screen.renderPixel(xt, yt - 1, 0xffffff00);
+			screen.renderPixel(xt + 1, yt, 0xffffff00);
+			screen.renderPixel(xt - 1, yt, 0xffffff00);
+		}
 		
 		if(health < 100){
 			for(int ya = 0; ya < 3; ya++){

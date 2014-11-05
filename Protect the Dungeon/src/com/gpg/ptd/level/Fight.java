@@ -153,7 +153,7 @@ public class Fight extends Dungeon{
 			}
 		}
 		
-		font.render("WASD to move, arrow keys to attack.", 500, 710, 0xffffffff, 1, true, screen);
+		font.render("WASD to move, arrow keys to attack, shift to sprint.", 450, 710, 0xffffffff, 1, true, screen);
 		font.render("Mob Count: " + mobs.size(), 10, 700, 0xffffffff, 1, true, screen);
 		font.render("Particle Count: " + particles.size(), 10, 710, 0xffffffff, 1, true, screen);
 				
@@ -168,15 +168,6 @@ public class Fight extends Dungeon{
 //		font.render("Energy: " + (int)player.getEnergy() + "%", 450, 10, 0xff7fCfff, 3, false, screen);
 //		font.render("Weight: " + player.getWeight(), 450, 35, 0xfff1Afff, 3, false, screen);
 //		font.render("Gold: " + player.getInventory().getAmount(), 450, 60, 0xff22ffff, 3, false, screen);
-		
-		for(Mob m : mobs){
-			font.render(m.getCollision().getX() + "", m.getX() - xScroll, m.getY() - yScroll, 0xffffffff, 1, true, screen);
-			font.render(m.getCollision().getY() + "", m.getX() - xScroll, m.getY() - yScroll + 10, 0xffffffff, 1, true, screen);
-			font.render((m.getCollision().getWidth() + m.getCollision().getX()) + "", m.getX() - xScroll, m.getY() - yScroll + 20, 0xffffffff, 1, true, screen);
-			font.render((m.getCollision().getHeight() + m.getCollision().getY()) + "", m.getX() - xScroll, m.getY() - yScroll + 30, 0xffffffff, 1, true, screen);
-		}
-		
-		
 		
 		font.render("Score " + getPlayer().getScore(), 10, 10, 0xB03030, 3, true, screen);
 		

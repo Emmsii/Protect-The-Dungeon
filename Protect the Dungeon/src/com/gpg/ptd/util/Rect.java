@@ -12,15 +12,6 @@ public class Rect {
 		this.height = height;
 	}
 
-	public boolean intersects(Rect r){
-		return !(y + height < r.getY() || y > r.getY() + r.getHeight() || x + width < r.getX() || x > r.getX() + r.getWidth());
-	}
-	
-	public void setPos(int x, int y){
-		this.x = x;
-		this.y = y;
-	}
-	
 	public int getX() {
 		return x;
 	}

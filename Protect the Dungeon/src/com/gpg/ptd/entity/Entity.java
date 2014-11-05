@@ -2,8 +2,9 @@ package com.gpg.ptd.entity;
 
 import java.util.Random;
 
+import org.w3c.dom.css.Rect;
+
 import com.gpg.ptd.level.Dungeon;
-import com.gpg.ptd.util.Rect;
 
 public class Entity {
 
@@ -14,9 +15,7 @@ public class Entity {
 	protected int x, y;
 	protected int tileX, tileY;
 	protected int time;
-	
-	protected Rect collision;
-	
+		
 	public Entity(int id, int x, int y, Dungeon dungeon, Random random){
 		this.id = id;
 		this.x = x;
@@ -24,7 +23,6 @@ public class Entity {
 		this.dungeon = dungeon;
 		this.random = random;
 		
-		collision = new Rect(x + 5, y + 5, 25, 25);
 	}
 
 	public int getId() {
@@ -75,11 +73,4 @@ public class Entity {
 		this.tileY = tileY;
 	}
 
-	public Rect getCollision() {
-		return collision;
-	}
-
-	public void setCollision(Rect collision) {
-		this.collision = collision;
-	}
 }
