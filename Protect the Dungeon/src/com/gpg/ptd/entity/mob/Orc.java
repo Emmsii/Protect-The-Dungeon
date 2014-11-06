@@ -28,18 +28,15 @@ public class Orc extends HostileMob{
 		
 		if(target == null) wanderSpawner();
 		else{
-			pathTo(new Vector2i(x / 32, y / 32), new Vector2i((target.getX() + 16)/ 32, (target.getY() + 16) / 32));	
-			attDir = dir;
-			attack(attDir, random.nextInt(4));
+//			attDir = dir;
+//			attack(attDir, random.nextInt(4));
 		}
+//		pathTo(new Vector2i(x / 32, y / 32), new Vector2i(dungeon.getPlayer().getX() + 16 / 32, dungeon.getPlayer().getY() + 16 / 32));
 		animation();
 		calculateBobbing();
 
 		if(knockback > 0.0f) calculateKnockback();
-		
 		if(attackTime > 0) attackTime--;
-		
-//		pathTo(new Vector2i(x / 32, y / 32), new Vector2i(dungeon.getPlayer().getX() / 32, dungeon.getPlayer().getY() / 32));
 
 		time++;
 		tileX = (x + 16) / 32;
@@ -58,14 +55,14 @@ public class Orc extends HostileMob{
 		}
 		
 		//Render collision box
-		for(int c = 0; c < 4; c++){
-			int xt = ((x - xScroll) + c % 2 * collision_width + collision_w_offset);
-			int yt = ((y - yScroll) + c / 2 * collision_height + collision_h_offset);
-			screen.renderPixel(xt, yt + 1, 0xffffff00);
-			screen.renderPixel(xt, yt - 1, 0xffffff00);
-			screen.renderPixel(xt + 1, yt, 0xffffff00);
-			screen.renderPixel(xt - 1, yt, 0xffffff00);
-		}
+//		for(int c = 0; c < 4; c++){
+//			int xt = ((x - xScroll) + c % 2 * collision_width + collision_w_offset);
+//			int yt = ((y - yScroll) + c / 2 * collision_height + collision_h_offset);
+//			screen.renderPixel(xt, yt + 1, 0xffffff00);
+//			screen.renderPixel(xt, yt - 1, 0xffffff00);
+//			screen.renderPixel(xt + 1, yt, 0xffffff00);
+//			screen.renderPixel(xt - 1, yt, 0xffffff00);
+//		}
 		
 		if(health < 100){
 			for(int ya = 0; ya < 3; ya++){

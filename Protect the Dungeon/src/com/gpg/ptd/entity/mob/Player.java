@@ -17,6 +17,8 @@ public class Player extends Mob{
 	protected int archery;
 	protected int magic;
 	
+	protected int weaponFrame = 0;
+	
 	protected int score;
 		
 	public Player(int id, int x, int y, String name, int health, Dungeon dungeon, Key key, Random random) {
@@ -80,7 +82,13 @@ public class Player extends Mob{
 		
 		if(attackTime > 0){
 			attackTime--;
+			weaponFrame++;
 			speed = speed / 2;
+		}
+		
+		if(attackTime == 0){ 
+			attDir = -1;
+			weaponFrame = 0;
 		}
 		
 		if(health <= 0) setDead(true);
@@ -90,12 +98,26 @@ public class Player extends Mob{
 		if(key.a) xa -= speed;
 		if(key.d) xa += speed;
 				
-		attDir = -1;
-		if(key.up) attDir = 0;
-		if(key.right) attDir = 1;
-		if(key.down) attDir = 2;
-		if(key.left) attDir = 3;
-		if(attDir != -1){
+		if(attackTime == 0){
+			if(key.up){
+				attDir = 0;
+				attackTime = 10;
+			}
+			if(key.right){
+				attDir = 1;
+				attackTime = 10;
+			}
+			if(key.down){
+				attDir = 2;
+				attackTime = 10;
+			}
+			if(key.left){
+				attDir = 3;
+				attackTime = 10;
+			}
+		}
+		
+		if(attackTime == 10){
 			attack(attDir, random.nextInt(20));
 			dir = attDir;
 		}
@@ -108,26 +130,37 @@ public class Player extends Mob{
 	}
 		
 	public void render(int xScroll, int yScroll, Screen screen){
-		if(attackTime > 0){
-			if(attDir == 0) screen.render(x - xScroll, (int) (y - yScroll - 15 - bob), 1, 2, 32, 1, SpriteSheet.textures);
-			if(attDir == 1) screen.render(x - xScroll + 19, (int) (y - yScroll + 6 - bob), 0, 2, 32, 1, SpriteSheet.textures);
-			if(attDir == 3) screen.render(x - xScroll - 19, (int) (y - yScroll + 6 - bob), 3, 2, 32, 1, SpriteSheet.textures);
-		}
+		if(attDir == 0) screen.render(x - xScroll, (int) (y - yScroll - 15 - bob) + weaponFrame, 1, 2, 32, 1, SpriteSheet.textures);
+		if(attDir == 1) screen.render(x - xScroll + 19 - weaponFrame, (int) (y - yScroll + 6 - bob), 0, 2, 32, 1, SpriteSheet.textures);
+		if(attDir == 3) screen.render(x - xScroll - 19 + weaponFrame, (int) (y - yScroll + 6 - bob), 3, 2, 32, 1, SpriteSheet.textures);
 		
 		screen.render((x) - xScroll, (int) ((y) - yScroll - bob), 2 + frame, 1 + dir, 32, 1, SpriteSheet.mobs);
 		
-		if(attackTime > 0){
-			if(attDir == 2) screen.render(x - xScroll - 1, (int) (y - yScroll + 23 - bob), 2, 2, 32, 1, SpriteSheet.textures);
-		}
+		if(attDir == 2) screen.render(x - xScroll - 1, (int) (y - yScroll + 23 - bob - weaponFrame), 2, 2, 32, 1, SpriteSheet.textures);
 		
-		for(int c = 0; c < 4; c++){
-			int xt = ((x - xScroll) + c % 2 * collision_width + collision_w_offset);
-			int yt = ((y - yScroll) + c / 2 * collision_height + collision_h_offset);
-			screen.renderPixel(xt, yt + 1, 0xffffff00);
-			screen.renderPixel(xt, yt - 1, 0xffffff00);
-			screen.renderPixel(xt + 1, yt, 0xffffff00);
-			screen.renderPixel(xt - 1, yt, 0xffffff00);
-		}
+//		for(int c = 0; c < 4; c++){
+//			int xt = ((x - xScroll) + c % 2 * collision_width + collision_w_offset);
+//			int yt = ((y - yScroll) + c / 2 * collision_height + collision_h_offset);
+//			screen.renderPixel(xt, yt + 1, 0xffffff00);
+//			screen.renderPixel(xt, yt - 1, 0xffffff00);
+//			screen.renderPixel(xt + 1, yt, 0xffffff00);
+//			screen.renderPixel(xt - 1, yt, 0xffffff00);
+//		}
+		
+//		Rect wc = null;
+//		
+//		if(attDir == 0) wc = new Rect(x + 13, y - 16, 7, 16);
+//		if(attDir == 1) wc = new Rect(x + 29, y + 18, 22, 7);
+//		if(attDir == 2) wc = new Rect(x + 13, y + 32, 7, 24);
+//		if(attDir == 3) wc = new Rect(x - 19, y + 18, 25, 7);
+//		
+//		if(wc != null){
+//			for(int ya = wc.getY(); ya < wc.getY() + wc.getHeight(); ya++){
+//				for(int xa = wc.getX(); xa < wc.getX() + wc.getWidth(); xa++){
+//					screen.renderPixelTrans(xa - xScroll, ya - yScroll, 0xff00ff00, 0.5f);
+//				}
+//			}	
+//		}
 		
 		if(health < 100){
 			for(int ya = 0; ya < 3; ya++){
@@ -142,6 +175,7 @@ public class Player extends Mob{
 				}
 			}
 		}
+
 	}
 
 	public String getName() {

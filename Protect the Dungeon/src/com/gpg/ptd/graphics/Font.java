@@ -3,8 +3,8 @@ package com.gpg.ptd.graphics;
 
 public class Font {
 
-	public final int SIZE = 16;
-	public final int SPACING = 7;
+	public final static int SIZE = 16;
+	public final static int SPACING = 7;
 		
 	private static String chars = "!\"#$%&'()`+,-./0" +
 								  "123456789:;<_>?@" +
@@ -14,7 +14,7 @@ public class Font {
 	
 	public Font(){}
 	
-	public void render(String msg, int x, int y, int color, float scale, boolean outline, Screen screen){
+	public static void render(String msg, int x, int y, int color, float scale, boolean outline, Screen screen){
 		if(x == -1) x = (int) ((screen.width / 2) - ((msg.length() / 2) * (SPACING * scale)));
 		if(y == -1) y = (int) ((screen.height / 2) - (SIZE * scale));
 		

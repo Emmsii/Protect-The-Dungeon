@@ -9,6 +9,7 @@ import com.gpg.ptd.entity.particle.TextParticle;
 import com.gpg.ptd.graphics.Screen;
 import com.gpg.ptd.level.Dungeon;
 import com.gpg.ptd.util.Pathfinder;
+import com.gpg.ptd.util.Rect;
 
 public class Mob extends Entity{
 	
@@ -141,6 +142,14 @@ public class Mob extends Entity{
 				else m.knockback = 2f;
 				m.knockDir = dir;
 			}
+			
+			if(!(this instanceof Player)){
+				if(!(m instanceof Player)){
+					if(this.knockback > 0) m.knockback = this.knockback / 2;
+					else m.knockback = 2f;
+					m.knockDir = dir;
+				}
+			}
 			return true;
 		}
 		return false;
@@ -156,10 +165,18 @@ public class Mob extends Entity{
 	}
 	
 	public void attack(int attDir, int damage){
-		if(attackTime == 0){
-			checkForMob(x, y, attDir, damage);
-			attackTime = 20;
+		Rect weaponCollision = null;
+		
+		if(attDir == 0) weaponCollision = new Rect(x + 13, y - 16, 7, 16);
+		if(attDir == 1) weaponCollision = new Rect(x + 29, y + 18, 22, 7);
+		if(attDir == 2) weaponCollision = new Rect(x + 13, y + 32, 7, 24);
+		if(attDir == 3) weaponCollision = new Rect(x - 19, y + 18, 25, 7);
+		
+		Mob attacking = dungeon.getMob(weaponCollision, this);
+		if(attacking != null){
+			attacking.damage(damage, attDir, attacking);
 		}
+	
 	}
 	
 	public void checkForMob(int x, int y, int attDir, int damage){

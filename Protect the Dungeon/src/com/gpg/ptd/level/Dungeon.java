@@ -105,6 +105,16 @@ public class Dungeon {
 		return alpha * alpha * (3.0f - 2.0f * alpha);
 	}
 	
+	public Mob getMob(Rect r2, Mob mob){
+		for(Mob m : mobs){
+			if(m.equals(mob)) continue;
+			Rect r1 = new Rect(m.getX() + m.getCollision_w_offset(), m.getY() + m.getCollision_h_offset(), m.getCollision_width(), m.getCollision_height());
+			
+			if((r1.getX() <= r2.getX() + r2.getWidth() && r2.getX() <= r1.getX() + r1.getWidth() && r1.getY() <= r2.getY() + r2.getHeight() && r2.getY() <= r1.getY() + r1.getHeight())) return m;
+		}
+		return null;
+	}
+	
 	public Mob getMob(int xa, int ya, Mob mob){	
 		for(Mob m : mobs){
 			if(m.equals(mob)) continue;

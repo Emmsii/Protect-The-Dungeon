@@ -134,24 +134,16 @@ public class Fight extends Dungeon{
 			font.render(s.getAmount() + "", s.getX() * 32 - xScroll, s.getY() * 32 - yScroll, 0xffffffff, 4, true, screen);
 		}
 		
-		for(int y = 0; y < height; y++){
-			for(int x = 0; x < width; x++){
-				for(int ya = 0; ya < 32; ya++){
-					for(int xa = 0; xa < 32; xa++){
-						if(ya == 0 || xa == 0){
-							screen.renderPixelTrans(xa + x * 32 - xScroll, ya + y * 32 - yScroll, 0xffffffff, 0.7f);
-						}
-					}
-				}
-				
-				if(mob[x][y] != -1){
-					screen.renderPixel(x * 32 - xScroll, y * 32 - yScroll, 0xff00FF04);
-					screen.renderPixel(x * 32 - xScroll + 1, y * 32 - yScroll + 1, 0xff00FF04);
-					screen.renderPixel(x * 32 - xScroll, y * 32 - yScroll + 1, 0xff00FF04);
-					screen.renderPixel(x * 32 - xScroll + 1, y * 32 - yScroll, 0xff00FF04);
-				}
-			}
-		}
+//		for(int y = 0; y < height; y++){
+//			for(int x = 0; x < width; x++){
+//				for(int ya = 0; ya < 32; ya++){
+//					for(int xa = 0; xa < 32; xa++){
+//						if(ya == 0 || xa == 0){
+//							screen.renderPixelTrans(xa + x * 32 - xScroll, ya + y * 32 - yScroll, 0xffffffff, 0.7f);
+//						}
+//					}
+//				}
+//				
 		
 		font.render("WASD to move, arrow keys to attack, shift to sprint.", 450, 710, 0xffffffff, 1, true, screen);
 		font.render("Mob Count: " + mobs.size(), 10, 700, 0xffffffff, 1, true, screen);

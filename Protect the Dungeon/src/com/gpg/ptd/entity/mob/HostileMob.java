@@ -67,7 +67,6 @@ public class HostileMob extends Mob{
 	}
 	
 	public void pathTo(Vector2i start, Vector2i end){
-		if(!canMove) return;
 		if(time % 4 == 0) path = pathfinder.findPath(start, end, 0);
 		if(path != null){
 			if(path.size() > 0){
