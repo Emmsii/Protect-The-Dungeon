@@ -34,8 +34,7 @@ public class HostileMob extends Mob{
 	
 	public void wanderSpawner(){
 		if(time % 10 + random.nextInt(25) == 0) pickWanderLocation();
-				
-		if(targetX != 0 && targetY != 0) pathTo(new Vector2i(x / 32, y / 32), new Vector2i(targetX, targetY));
+		if(targetX != 0 && targetY != 0) pathTo(new Vector2i(x / 32, y / 32), new Vector2i(targetX, targetY), 0);
 	}
 	
 	private void pickWanderLocation(){
@@ -66,8 +65,8 @@ public class HostileMob extends Mob{
 		
 	}
 	
-	public void pathTo(Vector2i start, Vector2i end){
-		if(time % 4 == 0) path = pathfinder.findPath(start, end, 0);
+	public void pathTo(Vector2i start, Vector2i end, int length){
+		if(time % 4 == 0) path = pathfinder.findPath(start, end, length);
 		if(path != null){
 			if(path.size() > 0){
 				Vector2i vec = path.get(path.size() - 1).getTile();

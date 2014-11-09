@@ -25,6 +25,8 @@ public class Fight extends Dungeon{
 	
 	private boolean fail = false;
 	
+	Player player;
+	
 	public Fight(GameState state, Mouse mouse, Key key, Font font, Screen screen, Random random) {
 		super(state, mouse, key, font, screen, random);
 		load();
@@ -125,13 +127,32 @@ public class Fight extends Dungeon{
 			}
 		}
 		
-		for(Particle p : particles) p.render(xScroll, yScroll, font, screen);
+		//Render LINES
+		int px = getPlayer().getX();
+		int py = getPlayer().getY();
+		for(Mob m : mobs){
+			if(m instanceof Player) continue;
+			screen.renderLine(px + 16, py + 16, m.getX() + 16, m.getY() + 16, xScroll, yScroll, this);
+		}
+		
+		
+//		for(Particle p : particles) p.render(xScroll, yScroll, font, screen);
+		for(int i = 0; i < height * 32; i++){
+			for(Particle p : particles){
+				if(p.getY() == i) p.render(xScroll, yScroll, font, screen);
+			}
+		}
 		for(Item i : items) i.render(xScroll, yScroll, screen);
-		for(Mob m : mobs) m.render(xScroll, yScroll, screen);
+//		for(Mob m : mobs) m.render(xScroll, yScroll, screen);
+		for(int i = 0; i < height; i++){
+			for(Mob m : mobs){
+				if(m.getY() / 32== i) m.render(xScroll, yScroll, screen);
+			}
+		}
 //		player.render(xScroll, yScroll, screen);
 		
 		for(Spawner s : spawners){
-			font.render(s.getAmount() + "", s.getX() * 32 - xScroll, s.getY() * 32 - yScroll, 0xffffffff, 4, true, screen);
+			Font.render(s.getAmount() + "", s.getX() * 32 - xScroll, s.getY() * 32 - yScroll, 0xffffffff, 4, true, screen);
 		}
 		
 //		for(int y = 0; y < height; y++){
@@ -145,9 +166,10 @@ public class Fight extends Dungeon{
 //				}
 //				
 		
-		font.render("WASD to move, arrow keys to attack, shift to sprint.", 450, 710, 0xffffffff, 1, true, screen);
-		font.render("Mob Count: " + mobs.size(), 10, 700, 0xffffffff, 1, true, screen);
-		font.render("Particle Count: " + particles.size(), 10, 710, 0xffffffff, 1, true, screen);
+		
+		Font.render("WASD to move, arrow keys to attack, shift to sprint.", 450, 710, 0xffffffff, 1, true, screen);
+		Font.render("Mob Count: " + mobs.size(), 10, 700, 0xffffffff, 1, true, screen);
+		Font.render("Particle Count: " + particles.size(), 10, 710, 0xffffffff, 1, true, screen);
 				
 //		font.render("Energy: " + (int)player.getEnergy() + "%", 10, 10, 0xffff00ff, 2f, true, screen);
 //		font.render("Weight: " + player.getWeight(), 10, 30, 0xff6CC9F8, 1, true, screen);
@@ -161,14 +183,14 @@ public class Fight extends Dungeon{
 //		font.render("Weight: " + player.getWeight(), 450, 35, 0xfff1Afff, 3, false, screen);
 //		font.render("Gold: " + player.getInventory().getAmount(), 450, 60, 0xff22ffff, 3, false, screen);
 		
-		font.render("Score " + getPlayer().getScore(), 10, 10, 0xB03030, 3, true, screen);
+		Font.render("Score " + getPlayer().getScore(), 10, 10, 0xB03030, 3, true, screen);
 		
-		font.render("Gold:", 10, 40, 0xffffffff, 2, true, screen);
-		font.render(getPlayer().getInventory().getAmount(), 85, 40, 0xfffff00f, 2, true, screen);
+		Font.render("Gold:", 10, 40, 0xffffffff, 2, true, screen);
+		Font.render(getPlayer().getInventory().getAmount(), 85, 40, 0xfffff00f, 2, true, screen);
 		
 		if(fail){
-			font.render("You Died!", 425, 250, 0xffff0000, 7, true, screen);
-			font.render("Moron", 615, 315, 0xffff0000, 1, true, screen);
+			Font.render("You Died!", 425, 250, 0xffff0000, 7, true, screen);
+			Font.render("Moron", 615, 315, 0xffff0000, 1, true, screen);
 		}
 	}
 

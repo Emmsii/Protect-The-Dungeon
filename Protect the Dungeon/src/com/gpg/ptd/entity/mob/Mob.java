@@ -33,8 +33,9 @@ public class Mob extends Entity{
 	protected int maxFrames = 0;
 	protected int attDir = -1;
 	protected int attackTime;
+	protected int weaponFrame = 0;
 	
-	protected int sight = 10;
+	protected int sight = 50;
 
 	protected float bob = 0.0f;
 	protected boolean up = true;
@@ -137,19 +138,9 @@ public class Mob extends Entity{
 	public boolean mobCollision(int xa, int ya){
 		Mob m = dungeon.getMob(xa, ya, this);
 		if(m != null){
-			if(this instanceof Player){
-				if(this.knockback > 0) m.knockback = this.knockback / 2;
-				else m.knockback = 2f;
-				m.knockDir = dir;
-			}
-			
-			if(!(this instanceof Player)){
-				if(!(m instanceof Player)){
-					if(this.knockback > 0) m.knockback = this.knockback / 2;
-					else m.knockback = 2f;
-					m.knockDir = dir;
-				}
-			}
+			if(this.knockback > 0) m.knockback = this.knockback / 2;
+			else m.knockback = 2f;
+			m.knockDir = dir;
 			return true;
 		}
 		return false;
@@ -174,17 +165,11 @@ public class Mob extends Entity{
 		
 		Mob attacking = dungeon.getMob(weaponCollision, this);
 		if(attacking != null){
-			attacking.damage(damage, attDir, attacking);
+			attacking.damage(damage, attDir, attacking, this);
 		}
 	
 	}
-	
-	public void checkForMob(int x, int y, int attDir, int damage){
-		Mob m = dungeon.checkAndGetMob((x) / 32, (y) / 32, attDir, this);
-		if(m != null) m.damage(damage, attDir, this);
-		
-	}
-	
+
 	public void animation(){
 		time++;
 		
@@ -196,8 +181,9 @@ public class Mob extends Entity{
 		}
 	}
 	
-	public void damage(int damage, int dir, Mob mob){
-		if(target == null) target = mob;
+	public void damage(int damage, int dir, Mob toDamage, Mob attacker){
+		
+		if(target == null) target = attacker;
 		if(damage > 0){
 			for(int i = 0; i < (damage * 3); i++) dungeon.addParticle(new BloodParticle(dungeon.getParticles().size(), x, y, 0xffE04141, 2, 0.4, dungeon, random));
 			dungeon.addParticle(new TextParticle(dungeon.getParticles().size(), x, y, "-" + damage, 0xffE04141, 2, 0.4, dungeon, random));
@@ -218,9 +204,19 @@ public class Mob extends Entity{
 		return (health * 32) / 100;
 	}
 	
+	public int convertEnergy(){
+		return (int) ((energy * 32) / 100);
+	}
+	
 	/*
 	 * Getters and Setters
 	 */
+	
+	public interface ILOSBoard{
+		public boolean contains(int x, int y);
+		public boolean isObsticle(int x, int y);
+		public void visit(int x, int y);
+	}
 	
 	public float getEnergy() {
 		return energy;

@@ -70,46 +70,80 @@ public class MainComponent extends Canvas implements Runnable{
 	}
 	
 	public void run() {
-		double nsPerFrame = 1000000000.0 / 60.0;
-		double unprocessedTime = 0;
-		double maxSkipFrames = 10;
-		
+//		double nsPerFrame = 1000000000.0 / 60.0;
+//		double unprocessedTime = 0;
+//		double maxSkipFrames = 10;
+//		
+//		long lastTime = System.nanoTime();
+//		long lastFrameTime = System.currentTimeMillis();
+//		int frames = 0;
+//		int updates = 0;
+//		while(running){
+//			long now = System.nanoTime();
+//			double passedTime = (now - lastTime) / nsPerFrame;
+//			lastTime = now;
+//			
+//			if(passedTime < -maxSkipFrames) passedTime = -maxSkipFrames;
+//			if(passedTime > maxSkipFrames) passedTime  = maxSkipFrames;
+//			
+//			unprocessedTime += passedTime;
+//			
+//			boolean render = false;
+//			while(unprocessedTime > 1){
+//				unprocessedTime -= 1;
+//				update();
+//				updates++;
+//				render = true;
+//				
+//				if(render){
+//					render();
+//					frames++;
+//				}
+//				
+//				if(System.currentTimeMillis() > lastFrameTime + 1000){
+//					fps = frames;
+//					ups = updates;
+//					msp = 1000.0 / frames;
+//					System.out.println(fps + " fps, " + ups + "ups | " + msp + " ms per frame.");
+//					lastFrameTime += 1000;
+//					frames = 0;
+//					updates = 0;
+//					msp = 0;
+//				}
+//			}
+//		}
 		long lastTime = System.nanoTime();
-		long lastFrameTime = System.currentTimeMillis();
+		double unprocessed = 0;
+		double nsPerTick = 1000000000.0 / 60;
 		int frames = 0;
 		int updates = 0;
+		long lastTimer1 = System.currentTimeMillis();
+		
 		while(running){
 			long now = System.nanoTime();
-			double passedTime = (now - lastTime) / nsPerFrame;
+			unprocessed += (now - lastTime) / nsPerTick;
 			lastTime = now;
-			
-			if(passedTime < -maxSkipFrames) passedTime = -maxSkipFrames;
-			if(passedTime > maxSkipFrames) passedTime  = maxSkipFrames;
-			
-			unprocessedTime += passedTime;
-			
-			boolean render = false;
-			while(unprocessedTime > 1){
-				unprocessedTime -= 1;
-				update();
+			boolean shouldRender = true;
+			while(unprocessed >= 1){
 				updates++;
-				render = true;
-				
-				if(render){
-					render();
-					frames++;
-				}
-				
-				if(System.currentTimeMillis() > lastFrameTime + 1000){
-					fps = frames;
-					ups = updates;
-					msp = 1000.0 / frames;
-					System.out.println(fps + " fps, " + ups + "ups | " + msp + " ms per frame.");
-					lastFrameTime += 1000;
-					frames = 0;
-					updates = 0;
-					msp = 0;
-				}
+				update();
+				unprocessed -= 1;
+				shouldRender = true;
+			}
+			
+			if(shouldRender){
+				frames++;
+				render();
+			}
+			
+			if(System.currentTimeMillis() - lastTimer1 > 1000){
+				lastTimer1 += 1000;
+				fps = frames;
+				ups = updates;
+				msp = 1000.0 / frames;
+				System.out.println(fps + " fps, " + ups + "ups | " + msp + " ms per frame.");
+				frames = 0;
+				updates = 0;
 			}
 		}
 	}

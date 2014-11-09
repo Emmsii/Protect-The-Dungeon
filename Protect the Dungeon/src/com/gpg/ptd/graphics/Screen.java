@@ -1,5 +1,6 @@
 package com.gpg.ptd.graphics;
 
+import com.gpg.ptd.level.Dungeon;
 import com.gpg.ptd.level.tile.Tile;
 
 public class Screen {
@@ -21,6 +22,42 @@ public class Screen {
 				pixels[x + y * width] = blend(pixels[x + y * width], col, delta);
 			}
 		}
+	}
+	
+	public void renderLine(int x1, int y1, int x2, int y2, int xScroll, int yScroll, Dungeon dungeon){
+		int w = x2 - x1 ;
+	    int h = y2 - y1 ;
+	    int dx1 = 0, dy1 = 0, dx2 = 0, dy2 = 0 ;
+	    if (w<0) dx1 = -1 ; else if (w>0) dx1 = 1 ;
+	    if (h<0) dy1 = -1 ; else if (h>0) dy1 = 1 ;
+	    if (w<0) dx2 = -1 ; else if (w>0) dx2 = 1 ;
+	    int longest = Math.abs(w) ;
+	    int shortest = Math.abs(h) ;
+	    if (!(longest>shortest)) {
+	        longest = Math.abs(h) ;
+	        shortest = Math.abs(w) ;
+	        if (h<0) dy2 = -1 ; else if (h>0) dy2 = 1 ;
+	        dx2 = 0 ;            
+	    }
+	    int numerator = longest >> 1 ;
+			
+	    for (int i=0;i<=longest;i++) {
+	    	int xa = x1 - xScroll;
+	    	int ya = y1 - yScroll;
+	    	int col = 0xff0000ff;
+	    	if(!dungeon.getTile(x1 / 32, y1 / 32).solid) col = 0xffff0000;
+	    	if(!(xa  < 0 || ya < 0 || xa >= width || ya >= height)) renderPixelTrans(xa, ya, col, 0.5f);
+
+	        numerator += shortest ;
+	        if (!(numerator<longest)) {
+	            numerator -= longest ;
+	            x1 += dx1 ;
+	            y1 += dy1 ;
+	        } else {
+	            x1 += dx2 ;
+	            y1 += dy2 ;
+	        }
+	    }
 	}
 	
 	public void renderPixel(int x, int y, int col){

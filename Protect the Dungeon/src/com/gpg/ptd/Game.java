@@ -48,6 +48,7 @@ public class Game {
 		switchState(4);
 		
 		init();
+		
 				
 	}
 	
@@ -138,7 +139,7 @@ public class Game {
 		motd = "Semi-working edit mode. Please test for awkwardness. Press E to check/save.";
 //		font.render(motd, (screen.width / 2) - ((motd.length() / 2) * font.SPACING), 700, 0xfffffff, 1, true, screen);
 		
-		font.render(main.getFps() + "fps " + main.getUps() + "ups", 10, 688, 0xffffffff, 1, true, screen);
+		Font.render(main.getFps() + "fps " + main.getUps() + "ups", 10, 688, 0xffffffff, 1, true, screen);
 				
 		for(int i = 0; i < main.getPixels().length; i++) main.getPixels()[i] = screen.pixels[i];
 		

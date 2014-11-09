@@ -85,6 +85,7 @@ public class Dungeon {
 				if(spawner.getAmount() >= 6) return;
 				if(x == xp && y == yp) continue;
 				if(!getTile(x, y).equals(Tile.floorTile)) continue;
+				if(mob[x][y] != -1) continue;
 				for(Mob m : mobs) if(m.getX() == x && m.getY() == y) continue;
 				if(random.nextInt(10) == 0){
 					//TODO: Make mob based of spawner type.
@@ -175,8 +176,7 @@ public class Dungeon {
 	}
 	
 	public Player getPlayer(){
-		for(Mob m : mobs) if(m instanceof Player) return (Player) m;
-		return null;
+		return (Player) mobs.get(0);
 	}
 		
 	public void addParticle(Particle p){

@@ -45,7 +45,7 @@ public class Pathfinder {
 				int yi = (i / 3) - 1;
 				Tile t = dungeon.getTile(x + xi, y + yi);
 				if(t.solid()) continue;
-				if(dungeon.mob[x + xi][y + yi] != -1) continue;
+//				if(dungeon.mob[x + xi][y + yi] != -1) continue;
 				Vector2i a = new Vector2i(x + xi, y + yi);
 				double gCost = current.getgCost() + (getDistance(current.getTile(), a) == 1 ? 1 : 0.95);
 				double hCost = getDistance(a, end);
@@ -57,104 +57,41 @@ public class Pathfinder {
 		return null;
 	}
 
-	public boolean los(Coord mob, Coord player){
+	public boolean line(int x0, int y0, int x1, int y1){
+		int w = x1 - x0;
+		int h = y1 - y0;
+		int dx1 = 0, dy1 = 0, dx2 = 0, dy2 = 0;
+		if(w < 0) dx1 = -1;
+		else if(w > 0) dx1 = 1;
+		if(h < 0) dy1 = -1;
+		else if(h > 0) dy1 = 1;
+		if(w < 0) dx2 = -1;
+		else if(w > 0) dx2 = 1;
 		
+		int longest = Math.abs(w);
+		int shortest = Math.abs(h);
 		
-		int x = 0, y = 0;
-		int t, ax, ay, sx, sy, dx, dy;
-		int px = player.getX();
-		int py = player.getY();
-		int mx = mob.getX();
-		int my = mob.getY();
-		
-//		System.out.println("line between: " + mx + ", " + mx + " & " + px + ", " + py); 
-		
-		dx = px - mx;
-		dy = py - my;
-		
-		ax = Math.abs(dx) << 1;
-		ay = Math.abs(dy) << 1;
-		
-		sx = (int) Math.sin(dx);
-		sy = (int) Math.sin(dy);
-		
-		x = mx;
-		y = my;
-		
-		if(ax > ay){
-			t = ay - (ax >> 1);
-			do{
-				if(t >= 0){
-					y += sy;
-					t -= ax;
-				}
-				
-				x += sx;
-				t += ay;
-				
-				if(x == px && y == py){
-					return true;
-				}
-			}
-			while(dungeon.getTile(x, y).solid);
-			return false;
-		}else{
-			t = ax - (ay >> 1);
-			do{
-				if(t >= 0){
-					x += sx;
-					t -= ay;
-				}
-				
-				y += sy;
-				t += ax;
-				if(x == px && y == py){
-					return true;
-				}
-			}
-			while(dungeon.getTile(x, y).solid);
-			return false;
+		if(!(longest > shortest)){
+			longest =Math.abs(h);
+			shortest = Math.abs(w);
+			if(h < 0) dy2 = -1;
+			else if(h > 0) dy2 = 1;
+			dx2 = 0;
 		}
-	}
-	
-	public boolean line(Coord start, Coord end){
-		List<Tile> line = new ArrayList<Tile>();
 		
-		int x0 = start.getX();
-		int y0 = start.getY();
-		int x1 = end.getX();
-		int y1 = end.getY();
-		
-		 int dx = Math.abs(x1 - x0);
-	        int dy = Math.abs(y1 - y0);
-	 
-	        int sx = x0 < x1 ? 1 : -1; 
-	        int sy = y0 < y1 ? 1 : -1; 
-	 
-	        int err = dx-dy;
-	        int e2;
-	 
-	        while (true) 
-	        {
-	            line.add(dungeon.getTile(x0, y0));
-	 
-	            if (x0 == x1 && y0 == y1) 
-	                break;
-	 
-	            e2 = 2 * err;
-	            if (e2 > -dy) 
-	            {
-	                err = err - dy;
-	                x0 = x0 + sx;
-	            }
-	 
-	            if (e2 < dx) 
-	            {
-	                err = err + dx;
-	                y0 = y0 + sy;
-	            }
-	        }
-		for(Tile t : line) if(t.solid) return true;
+		int numerator = longest >> 1;
+		for(int i = 0; i <= longest; i++){
+			if(dungeon.getTile(x0 / 32, y0 / 32).solid) return true;	
+			numerator += shortest;
+			if(!(numerator < longest)){
+				numerator -= longest;
+				x0 += dx1;
+				y0 += dy1;
+			}else{
+				x0 += dx2;
+				y0 += dy2;
+			}
+		}
 		return false;
 	}
 	

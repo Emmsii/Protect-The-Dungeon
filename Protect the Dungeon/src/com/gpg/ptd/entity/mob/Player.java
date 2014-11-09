@@ -16,9 +16,7 @@ public class Player extends Mob{
 	protected int strength;
 	protected int archery;
 	protected int magic;
-	
-	protected int weaponFrame = 0;
-	
+		
 	protected int score;
 		
 	public Player(int id, int x, int y, String name, int health, Dungeon dungeon, Key key, Random random) {
@@ -161,6 +159,12 @@ public class Player extends Mob{
 //				}
 //			}	
 //		}
+		
+		for(int ya = 0; ya < 3; ya++){
+			for(int xa = 0; xa < convertEnergy(); xa++){
+				screen.renderPixel(xa + x - xScroll, ya + y - yScroll, 0xffD75ADB);
+			}
+		}
 		
 		if(health < 100){
 			for(int ya = 0; ya < 3; ya++){
